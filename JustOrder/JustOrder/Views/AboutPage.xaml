@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+xmlns:badge="clr-namespace:Syncfusion.XForms.BadgeView;assembly=Syncfusion.SfBadgeView.XForms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:JustOrder.Models"
+             BackgroundColor="Black"
+             Shell.NavBarIsVisible="false"
+             xmlns:local="clr-namespace:JustOrder.ViewModels"
+             x:Class="JustOrder.Views.AboutPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="85"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="64"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="menu" Grid.Row="0" Grid.Column="0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenShell}"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <badge:SfBadgeView BadgeText="{Binding Count}" Grid.Row="0" Grid.Column="2" >
+                <badge:SfBadgeView.Content>
+                    <Image Source="shop" HeightRequest="64" WidthRequest="64">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Cart}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </badge:SfBadgeView.Content>
+                <badge:SfBadgeView.BadgeSettings>
+                    <badge:BadgeSetting BadgeType="Error" Offset="-5,15"/>
+                </badge:SfBadgeView.BadgeSettings>
+            </badge:SfBadgeView>
+            <!--<Image Source="shop" Grid.Row="0" Grid.Column="2" Margin="-5,0,20,0"/>-->
+            <SearchBar Placeholder="Seach" BackgroundColor="LightGray" Text="{Binding Search}" Grid.Column="1" Grid.Row="0" Margin="15"/>
+            <Label Text="BURGER KING" Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" FontFamily="Sweet.ttf#Sweet" TextColor="White" FontAttributes="Bold" FontSize="24"/>
+            <StackLayout Grid.Row="2" Grid.ColumnSpan="3">
+                <CollectionView Grid.Row="1" ItemsSource="{Binding burgers}"  Margin="15"  SelectionMode="Single"  VerticalScrollBarVisibility="Never" >
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="20" HorizontalItemSpacing="20" Span="2"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout  x:DataType="model:Burger">
+                                <Grid Padding="10" BackgroundColor="#131313" WidthRequest="145" HeightRequest="160">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Text="{Binding Name}" TextColor="#F9B522"/>
+                                    <Image Aspect="AspectFill" Source="{Binding Image}" Margin="10" WidthRequest="125" HeightRequest="110" 
+                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Grid.Row="1" Text="{Binding Description}" TextColor="White"
+                               VerticalOptions="End" HorizontalOptions="Start"/>
+                                    <Label Grid.Row="1" Text="{Binding Price, StringFormat='{0}€'}" TextColor="#F9B522" 
+                               VerticalOptions="End" HorizontalOptions="End"/>
+                                </Grid>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:MainPageViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

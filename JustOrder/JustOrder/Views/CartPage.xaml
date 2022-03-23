@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JustOrder.Views.CartPage"
+             BackgroundColor="Black"
+             xmlns:local="clr-namespace:JustOrder.ViewModels"  
+             xmlns:model="clr-namespace:JustOrder.Models"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.BindingContext>
+        <local:CartViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame HasShadow="True" HorizontalOptions="End" VerticalOptions="Center" Margin="25" CornerRadius="50">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center" Spacing="25">
+                        <Label Text="Go Back" 
+                           TextColor="Gray" 
+                           FontSize="16" 
+                           FontAttributes="None"/>
+                        <Image Source="cont" 
+                           HeightRequest="22" 
+                           Opacity="0.5"/>
+                    </StackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoBack}"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+                <Frame HasShadow="True" HorizontalOptions="Start" VerticalOptions="Center" Margin="25" CornerRadius="50">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center" Spacing="25">
+                        <Label Text="PayCheck!" 
+                           TextColor="Gray" 
+                           FontSize="16" 
+                           FontAttributes="None"/>
+                        <Image Source="cont" 
+                           HeightRequest="22" 
+                           Opacity="0.5"/>
+                    </StackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CancelCommand}"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+            </StackLayout>
+            <RefreshView x:DataType="local:CartViewModel"  Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView Grid.Row="1" Margin="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="None"
+                        ItemsSource="{Binding Items}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout x:DataType="model:Cart">
+                                <Grid HorizontalOptions="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Frame Grid.ColumnSpan="2" Grid.Row="0" CornerRadius="5" HasShadow="True"/>
+                                    <Frame Grid.ColumnSpan="2" Grid.Row="0" CornerRadius="5" HasShadow="True"/>
+                                    <Label Text="{Binding Name}" Grid.Column="0"  HorizontalOptions="Center" FontAttributes="Bold" TextColor="Black"/>
+                                    <Image Grid.Column="0" Grid.Row="0" Source="{Binding Image}" WidthRequest="128" HeightRequest="128"/>
+                                    <StackLayout Grid.Column="1" Grid.Row="0" Margin="15" Orientation="Vertical">
+                                        <Label Text="{Binding Description}"  VerticalOptions="Center" FontSize="16"/>
+                                        <Label Text="{Binding Price, StringFormat='{0}€'}" TextColor="Black"  VerticalOptions="Center" FontSize="16"/>
+                                        <Label Text="{Binding Quantity, StringFormat='Quantity: x{0}'}" TextColor="Black"  VerticalOptions="Center" FontSize="16"/>
+                                    </StackLayout>
+                                    <StackLayout Margin="15" Grid.Column="1" VerticalOptions="Start" HorizontalOptions="End" x:DataType="model:Cart">
+                                        <Image Source="trash">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:CartViewModel}}, Path=DelItem}"		
+                                CommandParameter="{Binding .}">
+                                                </TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Image Source="plus">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:CartViewModel}}, Path=AddItem}"		
+                                CommandParameter="{Binding .}">
+                                                </TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Image Source="minus" IsVisible="{Binding IsZero}">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:CartViewModel}}, Path=RemoveItem}"		
+                                CommandParameter="{Binding .}">
+                                                </TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </StackLayout>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
